@@ -6,12 +6,12 @@ use regex::Regex;
 use std::collections::HashSet;
 use std::io::{Error, ErrorKind};
 use stopwatch::Stopwatch;
-use v_api::app::OptAuthorize;
-use v_api::app::ResultCode;
 use v_authorization::common::Access;
 use v_az_lmdb::_authorize;
-use v_onto::onto::Onto;
-use v_search::common::QueryResult;
+use v_module::v_api::app::OptAuthorize;
+use v_module::v_api::app::ResultCode;
+use v_module::v_onto::onto::Onto;
+use v_module::v_search::common::QueryResult;
 use xapian_rusty::*;
 
 #[derive(Debug, PartialEq)]

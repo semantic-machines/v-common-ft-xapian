@@ -1,11 +1,11 @@
 use crate::xapian_reader::XapianReader;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
-use v_api::app::ResultCode;
 use v_module::module::Module;
-use v_onto::individual::Individual;
-use v_onto::onto::Onto;
-use v_search::common::FTQuery;
+use v_module::v_api::app::ResultCode;
+use v_module::v_onto::individual::Individual;
+use v_module::v_onto::onto::Onto;
+use v_module::v_search::common::FTQuery;
 
 #[derive(Debug)]
 pub struct IndexerSchema {
