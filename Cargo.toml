@@ -1,6 +1,6 @@
 [package]
 name = "v-common-ft-xapian"
-version = "0.1.18"
+version = "0.1.19"
 authors = ["itiu <ValeriyBushenev@gmail.com>"]
 edition = "2018"
 description = "common part of the veda platform"
@@ -22,4 +22,4 @@ stopwatch = "0.0.7"
 v_authorization = "0.1.0"
 
 v_az_lmdb = { package = "v-common-az-lmdb", version = "=0.1.1" }
-v_module = { package = "v-common-module", version = "0.1.19" }
+v_module = { package = "v-common-module", version = "0.1.20" }
