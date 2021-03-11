@@ -25,6 +25,14 @@ impl Default for Key2Slot {
 }
 
 impl Key2Slot {
+    pub fn new(t: SystemTime) -> Self {
+        Key2Slot {
+            data: Default::default(),
+            last_size_key2slot: 0,
+            modified: t,
+        }
+    }
+
     pub fn is_empty(&self) -> bool {
         self.data.is_empty()
     }
@@ -80,15 +88,14 @@ impl Key2Slot {
         let mut ff = OpenOptions::new().read(true).open(fname)?;
         ff.seek(SeekFrom::Start(0))?;
 
-        let mut key2slot = Key2Slot::default();
-        key2slot.modified = ff.metadata()?.modified()?;
+        let mut key2slot = Key2Slot::new(ff.metadata()?.modified()?);
 
         for line in BufReader::new(ff).lines() {
             if let Ok(ll) = line {
                 let (field, slot) = scan_fmt!(&ll, "\"{}\",{}", String, u32);
 
-                if field.is_some() && slot.is_some() {
-                    key2slot.data.insert(field.unwrap(), slot.unwrap());
+                if let (Some(f), Some(s)) = (field, slot) {
+                    key2slot.data.insert(f, s);
                 } else {
                     error!("fail parse key2slot, line={}", ll);
                 }
