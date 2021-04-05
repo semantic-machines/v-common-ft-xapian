@@ -1,11 +1,11 @@
 use crate::xapian_reader::XapianReader;
 use std::collections::{HashMap, HashSet};
 use std::fmt;
-use v_module::module::Module;
 use v_module::v_api::app::ResultCode;
 use v_module::v_onto::individual::Individual;
 use v_module::v_onto::onto::Onto;
 use v_module::v_search::common::FTQuery;
+use v_module::veda_backend::Backend;
 
 #[derive(Debug)]
 pub struct IndexerSchema {
@@ -17,6 +17,9 @@ pub struct IndexerSchema {
 
 impl fmt::Display for IndexerSchema {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        for (k, v) in self.class_2_database.iter() {
+            writeln!(f, "{} : [{}]", k, v)?
+        }
         for (k, v) in self.class_property_2_id.iter() {
             writeln!(f, "{} -> {}", k, v)?
         }
@@ -25,7 +28,7 @@ impl fmt::Display for IndexerSchema {
 }
 
 impl IndexerSchema {
-    pub fn load(&mut self, force: bool, onto: &Onto, module: &mut Module, xr: &mut XapianReader) {
+    pub fn load(&mut self, force: bool, onto: &Onto, backend: &mut Backend, xr: &mut XapianReader) {
         if self.class_property_2_id.is_empty() || force {
             if force {
                 info!("force reload schema");
@@ -33,10 +36,10 @@ impl IndexerSchema {
                 info!("reload schema");
             }
 
-            let res = xr.query(FTQuery::new_with_user("cfg:VedaSystem", "'rdf:type' === 'vdi:ClassIndex'"), &mut module.storage);
+            let res = xr.query(FTQuery::new_with_user("cfg:VedaSystem", "'rdf:type' === 'vdi:ClassIndex'"), &mut backend.storage);
             if res.result_code == ResultCode::Ok && res.count > 0 {
                 for id in res.result.iter() {
-                    if let Some(i) = module.get_individual(id, &mut Individual::default()) {
+                    if let Some(i) = backend.get_individual(id, &mut Individual::default()) {
                         i.parse_all();
                         self.add_schema_data(onto, i);
                     }
