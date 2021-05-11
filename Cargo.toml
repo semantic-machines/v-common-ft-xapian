@@ -1,6 +1,6 @@
 [package]
 name = "v-common-ft-xapian"
-version = "0.1.39"
+version = "0.1.40"
 authors = ["itiu <ValeriyBushenev@gmail.com>"]
 edition = "2018"
 description = "common part of the veda platform"

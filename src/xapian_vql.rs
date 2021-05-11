@@ -92,6 +92,8 @@ fn exec<T>(
 
     let mut auth_sw = Stopwatch::new();
 
+    let mut raw_ids = vec![];
+
     while it.is_next()? {
         processed += 1;
         if (processed % 1000) == 0 {
@@ -99,12 +101,14 @@ fn exec<T>(
         }
 
         let subject_id = it.get_document_data()?;
-
-        if subject_id.is_empty() {
-            it.next()?;
-            continue;
+        if !subject_id.is_empty() {
+            raw_ids.push(subject_id);
         }
 
+        it.next()?;
+    }
+
+    for subject_id in raw_ids {
         let mut is_passed = true;
 
         if op_auth == OptAuthorize::YES {
@@ -124,7 +128,6 @@ fn exec<T>(
                 break;
             }
         }
-        it.next()?;
     }
 
     sr.result_code = ResultCode::Ok;
